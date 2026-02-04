@@ -1,0 +1,154 @@
+name: Deploy Monitor & Notifications
+
+on:
+  deployment_status
+  push:
+    branches: [main]
+
+permissions:
+  deployments: read
+  contents: read
+  actions: write
+
+jobs:
+  monitor-deployment:
+    runs-on: ubuntu-latest
+    if: github.event.deployment_status.state != 'pending'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./trend-watcher-web
+        
+      - name: Check deployment status
+        id: check_status
+        run: |
+          if github.event.deployment_status.state == 'success'; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "url=${{ github.event.deployment_status.target_url }}" >> $GITHUB_OUTPUT
+          elif github.event.deployment_status.state == 'failure'; then
+            echo "status=failed" >> $GITHUB_OUTPUT
+            echo "error=${{ github.event.deployment_status.description }}" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Send success notification
+        if: steps.check_status.outputs.status == 'success'
+        run: |
+          echo "✅ Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "URL: ${{ steps.check_status.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Timestamp: $(date)" >> $GITHUB_STEP_SUMMARY
+          
+          # Send email notification
+          curl -s -X POST "https://api.sendgrid.com/v3/mail/send" \
+            -H "Authorization: Bearer ${{ secrets.SENDGRID_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "personalizations": [{
+                "to": [{"email": "wakingupinmatrix@gmail.com"}]
+              }],
+              "from": {"email": "deployments@trend-watcher.ai"},
+              "subject": "✅ Deployment Successful: trend-watcher-web",
+              "content": [{
+                "type": "text/plain",
+                "value": "Deployment completed successfully!\n\nURL: ${{ steps.check_status.outputs.url }}\n\nTimestamp: $(date)"
+              }]
+            }' || echo "Email notification failed (SendGrid not configured)"
+            
+      - name: Send failure notification & attempt fix
+        if: steps.check_status.outputs.status == 'failed'
+        run: |
+          echo "❌ Deployment Failed!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Error: ${{ steps.check_status.outputs.error }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Timestamp: $(date)" >> $GITHUB_STEP_SUMMARY
+          
+          # Attempt auto-fix based on error type
+          if echo "${{ steps.check_status.outputs.error }}" | grep -q "Type error"; then
+            echo "🔧 Attempting TypeScript fix..." >> $GITHUB_STEP_SUMMARY
+            
+            # Fix metadata issues
+            sed -i '/verification: {/,/^  }/d' trend-watcher-web/src/app/layout.tsx || true
+            
+            # Commit fix
+            git config user.email "deploy@trend-watcher.ai"
+            git config user.name "Deploy Bot"
+            git add -A
+            git commit -m "Auto-fix: Remove invalid metadata verification" || true
+            git push origin main || echo "Push failed - may need manual intervention"
+          fi
+          
+          # Send failure email
+          curl -s -X POST "https://api.sendgrid.com/v3/mail/send" \
+            -H "Authorization: Bearer ${{ secrets.SENDGRID_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "personalizations": [{
+                "to": [{"email": "wakingupinmatrix@gmail.com"}]
+              }],
+              "from": {"email": "deployments@trend-watcher.ai"},
+              "subject": "❌ Deployment Failed: trend-watcher-web",
+              "content": [{
+                "type": "text/plain",
+                "value": "Deployment failed!\n\nError: ${{ steps.check_status.outputs.error }}\n\nAuto-fix attempted. Check GitHub Actions for details."
+              }]
+            }' || echo "Email notification failed"
+            
+      - name: Create deployment report
+        run: |
+          echo "# Deployment Report" > deployment-report.md
+          echo "" >> deployment-report.md
+          echo "**Status:** ${{ steps.check_status.outputs.status || 'in_progress' }}" >> deployment-report.md
+          echo "" >> deployment-report.md
+          echo "**Timestamp:** $(date)" >> deployment-report.md
+          echo "" >> deployment-report.md
+          echo "**Repository:** ${{ github.repository }}" >> deployment-report.md
+          echo "**Branch:** ${{ github.ref_name }}" >> deployment-report.md
+          echo "**Commit:** ${{ github.sha }}" >> deployment-report.md
+          
+          # Upload report as artifact
+          mkdir -p artifacts
+          cp deployment-report.md artifacts/
+          
+      - name: Upload deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-report
+          path: artifacts/
+          retention-days: 7
+
+  scheduled-check:
+    # Run every 15 minutes
+    schedule:
+      - cron: '*/15 * * * *'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      
+    steps:
+      - name: Check Vercel deployments
+        run: |
+          RESPONSE=$(curl -s "https://api.vercel.com/v6/deployments?projectId=prj_8k0hAgxzjj3aBhWKfCoQpT8FpqP9&limit=1" \
+            -H "Authorization: Bearer ${{ secrets.VERCEL_TOKEN }}")
+          
+          STATUS=$(echo $RESPONSE | grep -o '"state":"[^"]*"' | head -1 | cut -d'"' -f4)
+          URL=$(echo $RESPONSE | grep -o '"url":"[^"]*"' | head -1 | cut -d'"' -f4)
+          
+          if [ "$STATUS" = "ERROR" ] || [ "$STATUS" = "FAILED" ]; then
+            echo "❌ Last deployment failed"
+            echo "Triggering notification..."
+          else
+            echo "✅ Deployment status: $STATUS"
+          fi
