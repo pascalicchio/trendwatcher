@@ -1,3 +1,10 @@
 
 # Deployment Monitor (every 5 minutes)
 */5 * * * * /root/.openclaw/trendwatcher/deploy-monitor.sh >> /root/.openclaw/trendwatcher/cron/logs/deploy-monitor.log 2>&1
+
+# TrendWatcher Daily Automation
+# 02:00 UTC - Scan for trending products
+0 2 * * * cd /root/.openclaw/trendwatcher/trend-engine && node trend-engine.cjs scan >> ../cron/logs/trend-scan.log 2>&1
+
+# 08:00 UTC - Generate Intelligence Card and send report
+0 8 * * * cd /root/.openclaw/trendwatcher/trend-engine && node trend-engine.cjs daily >> ../cron/logs/intelligence-report.log 2>&1
