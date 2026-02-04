@@ -1,4 +1,4 @@
-# Trend-Watcher AI - API Setup Guide
+# TrendWatcher AI - API Setup Guide
 
 ## Required APIs for Full Functionality
 
@@ -67,7 +67,7 @@ PINTEREST_ACCESS_TOKEN=your_token
 4. Add to `.env`:
 ```
 SENDGRID_API_KEY=your_api_key
-SENDGRID_FROM_EMAIL=alerts@trend-watcher.ai
+SENDGRID_FROM_EMAIL=alerts@trendwatcher.ai
 ```
 
 ---
@@ -139,7 +139,7 @@ PINTEREST_ACCESS_TOKEN=
 
 # Email
 SENDGRID_API_KEY=
-SENDGRID_FROM_EMAIL=alerts@trend-watcher.ai
+SENDGRID_FROM_EMAIL=alerts@trendwatcher.ai
 
 # Payments
 STRIPE_PUBLISHABLE_KEY=
@@ -156,7 +156,7 @@ MINIMAX_API_KEY=
 DATABASE_URL=./data/trends_history.db
 
 # App
-NEXT_PUBLIC_SITE_URL=https://trend-watcher-web.vercel.app
+NEXT_PUBLIC_SITE_URL=https://trendwatcher-web.vercel.app
 ```
 
 ---
@@ -177,7 +177,7 @@ NEXT_PUBLIC_SITE_URL=https://trend-watcher-web.vercel.app
 
 Run to test each API:
 ```bash
-cd /root/.openclaw/trend-watcher
+cd /root/.openclaw/trendwatcher
 node trend-engine/test-apis.js
 ```
 

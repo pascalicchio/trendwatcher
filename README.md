@@ -1,4 +1,4 @@
-# Trend-Watcher AI Project
+# TrendWatcher AI Project
 ## The "Speed" Arbitrage Service
 
 ## Project Overview
@@ -29,7 +29,7 @@ Autonomous business that identifies trending products 48 hours before competitio
 
 ## Files Structure
 ```
-/root/.openclaw/trend-watcher/
+/root/.openclaw/trendwatcher/
 ├── landing-page/          # Carrd/Webflow export
 ├── trend-engine/         # Core scraping/analysis
 ├── emails/              # Email templates & sending

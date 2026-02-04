@@ -1,17 +1,17 @@
 #!/bin/bash
-# GitHub Setup Script for Trend-Watcher
+# GitHub Setup Script for TrendWatcher
 
 echo "🔗 Creating GitHub repository..."
 echo ""
 echo "📋 INSTRUCTIONS:"
 echo "1. Go to https://github.com/new"
-echo "2. Create a new repository named: trend-watcher"
+echo "2. Create a new repository named: trendwatcher"
 echo "3. Set it to PUBLIC"
 echo "4. DO NOT initialize with README/.gitignore"
 echo "5. Click 'Create repository'"
 echo ""
 echo "Then run:"
-echo "  cd /root/.openclaw/trend-watcher"
+echo "  cd /root/.openclaw/trendwatcher"
 echo "  git push -u origin main"
 echo ""
 echo "Or I can try to create it via GitHub API..."
@@ -20,12 +20,12 @@ echo "Or I can try to create it via GitHub API..."
 if command -v gh &> /dev/null; then
     echo ""
     echo "🔧 GitHub CLI detected. Creating repo..."
-    gh repo create trend-watcher --public --description "Speed Arbitrage - AI-powered trend detection for e-commerce"
+    gh repo create trendwatcher --public --description "Speed Arbitrage - AI-powered trend detection for e-commerce"
 else
     echo ""
     echo "❌ GitHub CLI not found. Please create manually at:"
     echo "   https://github.com/new"
     echo ""
-    echo "Repository name: trend-watcher"
+    echo "Repository name: trendwatcher"
     echo "Description: Speed Arbitrage - AI-powered trend detection for e-commerce"
 fi

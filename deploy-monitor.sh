@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Trend-Watcher Deployment Monitor & Auto-Fix System
+# TrendWatcher Deployment Monitor & Auto-Fix System
 # Monitors Vercel deployments, checks status, and auto-fixes common issues
 
 # Configuration
 VERCEL_TOKEN="${VERCEL_TOKEN}"
 PROJECT_ID="prj_8k0hAgxzjj3aBhWKfCoQpT8FpqP9"
-DEPLOYMENT_LOG_FILE="/root/.openclaw/trend-watcher/cron/logs/deploy-monitor.log"
+DEPLOYMENT_LOG_FILE="/root/.openclaw/trendwatcher/cron/logs/deploy-monitor.log"
 EMAIL_TO="wakingupinmatrix@gmail.com"
-EMAIL_FROM="deployments@trend-watcher.ai"
+EMAIL_FROM="deployments@trendwatcher.ai"
 
 # Colors for output
 RED='\033[0;31m'
@@ -29,7 +29,7 @@ send_email() {
     # Log email instead of sending (Gmail app password expired)
     log "📧 Email notification: $subject"
     log "Body: $body"
-    echo "$(date): $subject - $body" >> /root/.openclaw/trend-watcher/cron/logs/email-notifications.log
+    echo "$(date): $subject - $body" >> /root/.openclaw/trendwatcher/cron/logs/email-notifications.log
     
     # Uncomment below when Gmail app password is regenerated
     # if command -v node &> /dev/null; then
@@ -101,7 +101,7 @@ analyze_and_fix() {
 # Fix metadata issues
 fix_metadata_issue() {
     log "Attempting to fix metadata issues..."
-    cd /root/.openclaw/trend-watcher-web
+    cd /root/.openclaw/trendwatcher-web
     
     # Check layout.tsx for invalid metadata
     if grep -q "verification:" src/app/layout.tsx; then
@@ -119,7 +119,7 @@ fix_metadata_issue() {
 # Fix compilation issues
 fix_compilation_issue() {
     log "Attempting to fix compilation issues..."
-    cd /root/.openclaw/trend-watcher-web
+    cd /root/.openclaw/trendwatcher-web
     
     # Try running build locally to see exact error
     npm run build 2>&1 | tail -50
@@ -129,7 +129,7 @@ fix_compilation_issue() {
 # Fix node modules
 fix_node_modules() {
     log "Reinstalling node modules..."
-    cd /root/.openclaw/trend-watcher-web
+    cd /root/.openclaw/trendwatcher-web
     rm -rf node_modules package-lock.json
     npm install
     return $?
@@ -138,7 +138,7 @@ fix_node_modules() {
 # Fix large files
 fix_large_files() {
     log "Cleaning up large files..."
-    cd /root/.openclaw/trend-watcher-web
+    cd /root/.openclaw/trendwatcher-web
     
     # Check .gitignore
     if [ -f .gitignore ]; then
@@ -159,7 +159,7 @@ fix_large_files() {
 # Trigger new deployment
 trigger_deployment() {
     log "Triggering new deployment..."
-    cd /root/.openclaw/trend-watcher-web
+    cd /root/.openclaw/trendwatcher-web
     
     git add -A
     git commit -m "Auto-fix: Deployment issue resolved" || true
@@ -170,7 +170,7 @@ trigger_deployment() {
         -H "Authorization: Bearer $VERCEL_TOKEN" \
         -H "Content-Type: application/json" \
         -d '{
-            "name": "trend-watcher-web",
+            "name": "trendwatcher-web",
             "projectSettings": {
                 "framework": "nextjs"
             },
@@ -210,7 +210,7 @@ main() {
         log "Deploy URL: $url"
         
         # Send success email
-        send_email "✅ Deployment Successful: trend-watcher-web" "Deployment completed successfully!\n\nURL: https://$url\n\nTimestamp: $(date)"
+        send_email "✅ Deployment Successful: trendwatcher-web" "Deployment completed successfully!\n\nURL: https://$url\n\nTimestamp: $(date)"
         
         exit 0
     elif [ "$status" = "ERROR" ] || [ "$status" = "FAILED" ]; then
@@ -224,7 +224,7 @@ main() {
         log "Step: $error_step"
         
         # Send failure email
-        send_email "❌ Deployment Failed: trend-watcher-web" "Deployment failed!\n\nError: $error_msg\nStep: $error_step\n\nAttempting auto-fix..."
+        send_email "❌ Deployment Failed: trendwatcher-web" "Deployment failed!\n\nError: $error_msg\nStep: $error_step\n\nAttempting auto-fix..."
         
         # Analyze and fix
         local fix_result

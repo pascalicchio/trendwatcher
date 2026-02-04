@@ -1,3 +1,3 @@
 
 # Deployment Monitor (every 5 minutes)
-*/5 * * * * /root/.openclaw/trend-watcher/deploy-monitor.sh >> /root/.openclaw/trend-watcher/cron/logs/deploy-monitor.log 2>&1
+*/5 * * * * /root/.openclaw/trendwatcher/deploy-monitor.sh >> /root/.openclaw/trendwatcher/cron/logs/deploy-monitor.log 2>&1
