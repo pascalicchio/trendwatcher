@@ -3,8 +3,11 @@
 */5 * * * * /root/.openclaw/trendwatcher/deploy-monitor.sh >> /root/.openclaw/trendwatcher/cron/logs/deploy-monitor.log 2>&1
 
 # TrendWatcher Daily Automation
-# 02:00 UTC - Scan for trending products
+# 02:00 UTC - Scan for trending products (TikTok, Amazon, Google)
 0 2 * * * cd /root/.openclaw/trendwatcher/trend-engine && node trend-engine.cjs scan >> ../cron/logs/trend-scan.log 2>&1
+
+# 02:30 UTC - Get Amazon Movers & Shakers data
+30 2 * * * cd /root/.openclaw/trendwatcher/trend-engine && node amazon-movers.js >> ../cron/logs/amazon-movers.log 2>&1
 
 # 08:00 UTC - Generate Intelligence Card and send report
 0 8 * * * cd /root/.openclaw/trendwatcher/trend-engine && node trend-engine.cjs daily >> ../cron/logs/intelligence-report.log 2>&1

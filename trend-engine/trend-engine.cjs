@@ -10,6 +10,8 @@ const CONFIG = {
     'trending amazon product',
     'amazon movers and shakers',
     'amazon hot new releases',
+    'site:ebay.com trending products',
+    'site:ebay.com most popular',
     'dropshipping winning product',
     'tiktok made me buy it',
     'product going viral 2026'

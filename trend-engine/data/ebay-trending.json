@@ -1,0 +1,57 @@
+{
+  "id": "EBAY-1770181995020",
+  "timestamp": "2026-02-04T05:13:15.020Z",
+  "source": "eBay Trending",
+  "products": [
+    {
+      "rank": 1,
+      "title": "Trending Deals on eBay | Best deals and Free shipping",
+      "link": "https://www.ebay.com/deals/trending/"
+    },
+    {
+      "rank": 2,
+      "title": "Elevate Your Online Business with Best Selling Products ...",
+      "link": "https://export.ebay.com/in/selling/best-selling-item/"
+    },
+    {
+      "rank": 3,
+      "title": "Watchlist Trend Report | eBay.com",
+      "link": "https://pages.ebay.com/ebay-watchlist-trend-report/"
+    },
+    {
+      "rank": 4,
+      "title": "Trending in Tech",
+      "link": "https://www.ebay.com/deals/trending/tech"
+    },
+    {
+      "rank": 5,
+      "title": "getTopSellingProducts - API Reference - Merchandising API",
+      "link": "https://developer.ebay.com/devzone/merchandising/docs/callref/gettopsellingproducts.html"
+    },
+    {
+      "rank": 6,
+      "title": "Trending in Sporting Goods",
+      "link": "https://www.ebay.com/deals/trending/sporting-goods"
+    },
+    {
+      "rank": 7,
+      "title": "Future Trending Products | eBay Stores",
+      "link": "https://www.ebay.com/str/futuretrendingproducts?_soffType=CodedCouponOffer&_tab=sales&_trksid=p4429486.m2548.l6244&_soffid=15505274608"
+    },
+    {
+      "rank": 8,
+      "title": "Trending in Kitchen, Dining & Bar",
+      "link": "https://www.ebay.com/deals/trending/home-garden/kitchen-dining-bar"
+    },
+    {
+      "rank": 9,
+      "title": "Trending in Major Appliances",
+      "link": "https://www.ebay.com/deals/trending/home-garden/major-appliances"
+    },
+    {
+      "rank": 10,
+      "title": "Most Popular",
+      "link": "https://www.ebay.com/shop/most-popular?_nkw=most+popular"
+    }
+  ]
+}
