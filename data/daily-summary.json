@@ -1,0 +1,35 @@
+{
+  "date": "2026-02-04",
+  "totalTrendsFound": 5,
+  "topWinner": "Aesthetic Notebook Set",
+  "topVelocity": "+520%",
+  "allProducts": [
+    "Aesthetic Notebook Set",
+    "Bedside Sleep Sound Machine",
+    "LED Therapy Face Mask",
+    "Resistance Band Set",
+    "Portable Espresso Maker"
+  ],
+  "saturationSummary": [
+    {
+      "product": "Aesthetic Notebook Set",
+      "status": "GOLDEN GAP"
+    },
+    {
+      "product": "Bedside Sleep Sound Machine",
+      "status": "GOLDEN GAP"
+    },
+    {
+      "product": "LED Therapy Face Mask",
+      "status": "GOLDEN GAP"
+    },
+    {
+      "product": "Resistance Band Set",
+      "status": "GOLDEN GAP"
+    },
+    {
+      "product": "Portable Espresso Maker",
+      "status": "GOLDEN GAP"
+    }
+  ]
+}
